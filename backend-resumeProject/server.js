@@ -2,12 +2,16 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 
+import { connectDB } from "./config/db.js";
+
 const app = express();
 const port = 4000;
-//连接数据库
 
 //中间件：连通前后端
 app.use(cors());
+
+//连接数据库
+connectDB();
 
 app.use(express.json());
 
