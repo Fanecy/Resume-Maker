@@ -40,7 +40,43 @@ export const registerUser = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "Something wrong with server",
+      message: "服务器错误",
+      error: error.message,
+    });
+  }
+};
+
+//登录函数
+export const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = User.findOne({ email });
+    if (!user)
+      return res.status(500).json({ message: "登录错误,邮箱或密码不正确!" });
+
+    //密码验证
+    const isMatched = await bcrypt.compare(password, user.password);
+    if (!isMatched)
+      return res.status(500).json({ message: "登录错误,邮箱或密码不正确!" });
+  } catch (error) {
+    res.status(500).json({
+      message: "服务器错误",
+      error: error.message,
+    });
+  }
+};
+
+//获得用户信息函数
+export const getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "获取用户信息错误" });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({
+      message: "服务器错误",
       error: error.message,
     });
   }
