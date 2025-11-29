@@ -3,6 +3,7 @@ import cors from "cors";
 import "dotenv/config";
 
 import { connectDB } from "./config/db.js";
+import userRouters from "./routes/userRouters.js";
 
 const app = express();
 const port = 4000;
@@ -14,6 +15,9 @@ app.use(cors());
 connectDB();
 
 app.use(express.json());
+console.log("加载路由模块:", userRouters);
+
+app.use("/api/auth", userRouters);
 
 //Route
 // 定义 GET 类型路由：路径为 "/"（根路径），用于测试服务器是否启动成功
